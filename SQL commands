@@ -1,0 +1,195 @@
+# Template
+
+
+import sqlite3
+
+#1 Connect to database
+conn = sqlite3.connect('customer.db')
+
+# Create a cursor
+""" A cursor is an object which helps to execute the 
+query and fetch the records from the database."""
+c = conn.cursor()
+
+#1 Create a Table
+c.execute("""CREATE TABLE customers(
+        first_name text,
+        last_name text,
+        email text
+    )""")
+
+# Different types of DATATYPES include
+# null  
+# integer
+# real
+# text
+# blob
+
+#2z print message
+print("command executed successfully...")
+
+#3 Commit our connectionto our database
+conn.commit()
+
+#4 Close our connection
+conn.close()
+
+
+
+
+
+
+
+
+
+#1 Create a Table
+c.execute("""CREATE TABLE customers(
+        first_name text,
+        last_name text,
+        email text
+    )""")
+
+
+#2 INSERT INTO table
+c.execute("INSERT INTO customers VALUES ('John', 'Elder', 'john@google.com')")
+
+
+
+#3 INSERT MANY CUSTOMERS
+many_customers = [
+                    ('Wes', 'Brown', 'wes@brown.com'),
+                    ('Steph', 'Kueta', 'steph@kueta.com'),
+                    ('Dan', 'Pass', 'dan@pass.com'),
+                ]
+c.executemany("INSERT INTO customers VALUES (?,?,?)", many_customers)
+
+
+
+#4 QUERY THE DATABASE
+c.execute("SELECT * FROM customers")
+
+print("Fetch one")
+print(c.fetchone())
+print("")
+
+print("Fetch many")
+print(c.fetchmany(2))
+print("")
+
+print("Fetch all")
+print(c.fetchall())
+print("")
+
+
+
+#5 FETCH EACH COLOMN OF FIRST ITEM
+print(c.fetchone()[0])
+print("")
+print(c.fetchone()[1])
+print("")
+print(c.fetchone()[2])
+print("")
+print("") 
+
+
+
+#6 FORMATTING QWUERY OUTPUT
+c.execute("SELECT * FROM customers")
+
+
+items = c.fetchall()
+
+for item in items:
+    print(item)
+for item in items:
+    print(item[1])
+for item in items:
+    print(item[0] + " " + item[1] + " " + item[2])
+
+
+#7 Querying unique items using WHERE keyword
+c.execute("SELECT * FROM customers WHERE last_name = 'Elder'")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+    
+
+c.execute("SELECT * FROM customers WHERE last_name LIKE 'Br%'")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+
+
+
+c.execute("SELECT * FROM customers WHERE email LIKE '%google.com'")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+    
+
+c.execute("SELECT rowid, * FROM customers WHERE email LIKE '%google.com'")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+
+
+#8 update Records
+c.execute('''UPDATE customers SET first_name = 'Bobby' 
+                WHERE rowid = 1    
+    ''')
+
+conn.commit()
+
+c.execute("SELECT rowid, * FROM customers")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+
+
+#9 Delete Records
+c.execute("DELETE from customers WHERE rowid = 6")
+
+conn.commit()
+
+c.execute("SELECT rowid, * FROM customers")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+
+
+#10 ORDER BY 
+c.execute("SELECT rowid, * FROM customers ORDER BY rowid DESC")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+
+
+#11 ORDER BY 
+c.execute("SELECT rowid, * FROM customers ORDER BY last_name")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+
+
+#12 AND/OR
+c.execute("SELECT rowid, * FROM customers WHERE last_name LIKE 'Br%' AND first_name LIKE '%rs'")
+
+items = c.fetchall()
+for item in items:
+    print(item)
+
+
+#13 LIMIT
+c.execute("SELECT rowid, * FROM customers WHERE first_name LIKE '%s' LIMIT 2")
+
+items = c.fetchall()
+for item in items:
+    print(item)
